@@ -8,11 +8,7 @@ const {
     createPost,
     updatePost,
     getAllPosts,
-    getPostsByUser,
-    createTags,
-    createPostTag,
-    addTagsToPost,
-    getPostById,
+    getAllTags,
     getPostsByTagName,
 } = require('./index')
 
@@ -207,6 +203,13 @@ async function testDB() {
         const posts = await getAllPosts();
         console.log("Result:", posts);
 
+        console.log("Calling updatePost on posts[0]");
+        const updatePostResult = await updatePost(posts[0].id, {
+          title: "New Title",
+          content: "Updated Content"
+        });
+        console.log("Result:", updatePostResult);
+
 
         console.log("Calling updatePost on posts[1], only updating tags");
         const updatePostTagsResult = await updatePost(posts[1].id, {
@@ -216,7 +219,11 @@ async function testDB() {
 
         console.log("Calling getUserById with 1");
         const albert = await getUserById(1);
-        console.log("Result:", albert)
+        console.log("Result:", albert);
+
+        console.log("Calling getAllTags");
+        const allTags = await getAllTags();
+        console.log("Result:", allTags);
 
         console.log("Calling getPostsByTagName with #happy");
         const postsWithHappy = await getPostsByTagName("#happy");
