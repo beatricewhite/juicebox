@@ -7,14 +7,30 @@ tagsRouter.use((req, res, next) => {
     next();
 });
 
-const { getAllTags } = require('../db');
+const { getPostsByTagName } = require('../db');
 
-tagsRouter.get('/', async (req, res) => {
-    const tags = await getAllTags();
+tagsRouter.get('/:tagName/posts', async (req, res) => {
+    // const tags = await getAllTags();
+    const { tagName } = req.params
+
+    try {
+        const postByTag= await getPostsByTagName(tagName)
+        const posts = postByTag.filter(post => {
+            if (post.active && (req.user && post.author.id === req.user.id)) {
+                return true;
+            } else {
+                return false;
+            }
+        });
+        res.send({ post: posts })
+    } catch ({ name, message }) {
+        next({ name,message });
+    }
+
     
-    res.send({
-        tags
-    });
+    // res.send({
+    //     tags
+    // });
 });
 
 module.exports = tagsRouter;
