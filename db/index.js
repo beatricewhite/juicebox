@@ -169,7 +169,7 @@ async function getAllPosts() {
       const posts = await Promise.all(postIds.map(
         post => getPostById( post.id )
       ));
-  
+  console.log("posts from getAllPosts", posts)
       return posts;
     } catch (error) {
       throw error;
@@ -204,7 +204,7 @@ async function getAllPosts() {
         WHERE id=$1;
       `, [post.authorId])
 
-      console.log("LOOK AT THIS", author)
+      // console.log("LOOK AT THIS", author)
   
       post.tags = tags;
       post.author = author;

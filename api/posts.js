@@ -76,21 +76,26 @@ postsRouter.patch('/:postId', requireUser, async (req, res, next) => {
 
 
 
-  postsRouter.get('/', async (req, res) => {
+  postsRouter.get('/', async (req, res, next) => {
     try {
       const allPosts = await getAllPosts();
+      console.log("all posts from postsRouter.get", allPosts)
   
       const posts = allPosts.filter(post => {
-        if (post.active && (req.user && post.author.id === req.user.id)) {
+        if (post.active) {
             return true;
+        }
+        if (req.user && post.author.id === req.user.id) {
+          return true;
         } else {
             return false;
         }
     });
-  
+        console.log("posts from posts.js", posts)
       res.send({
         posts
       });
+
     } catch ({ name, message }) {
       next({ name, message });
     }
